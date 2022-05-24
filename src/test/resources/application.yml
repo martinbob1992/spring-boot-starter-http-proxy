@@ -1,0 +1,11 @@
+server:
+    port: 8080
+
+spring:
+    profiles:
+      active: prod
+
+
+logging:
+    level:
+      com.marsh.proxy.util: debug

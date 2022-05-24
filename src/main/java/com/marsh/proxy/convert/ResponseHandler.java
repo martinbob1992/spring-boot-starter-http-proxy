@@ -7,5 +7,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface ResponseHandler {
 
-    Class<? extends com.marsh.proxy.convert.ResponseConvert> convert() default DefaultResponseConvert.class;
+    Class<? extends ResponseConvert> convert() default DefaultResponseConvert.class;
 }

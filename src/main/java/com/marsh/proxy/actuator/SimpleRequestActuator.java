@@ -7,7 +7,7 @@ import cn.hutool.http.Method;
  * @author Marsh
  * @date 2021-12-08日 9:20
  */
-public class SimpleRequestActuator extends com.marsh.proxy.actuator.AbstractRequestActuator {
+public class SimpleRequestActuator extends AbstractRequestActuator {
 
     public SimpleRequestActuator(java.lang.reflect.Method method, String url, Method requestMethod) {
         super(method, url, requestMethod);

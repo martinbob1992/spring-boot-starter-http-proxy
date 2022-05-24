@@ -8,7 +8,7 @@ import com.marsh.proxy.exception.DataProxyException;
  * @author Marsh
  * @date 2021-11-30日 8:56
  */
-public class DefaultResponseConvert implements com.marsh.proxy.convert.ResponseConvert<String> {
+public class DefaultResponseConvert implements ResponseConvert<String> {
 
     /**
      * 检验返回结果是否正常

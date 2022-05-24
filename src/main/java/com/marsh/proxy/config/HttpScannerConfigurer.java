@@ -41,7 +41,7 @@ public class HttpScannerConfigurer implements BeanDefinitionRegistryPostProcesso
             packages = new String[1];
             packages[0] = bean.getClass().getPackage().getName();
         }
-        com.marsh.proxy.config.ClassPathHttpProxyScanner scanner = new com.marsh.proxy.config.ClassPathHttpProxyScanner(beanDefinitionRegistry);
+        ClassPathHttpProxyScanner scanner = new ClassPathHttpProxyScanner(beanDefinitionRegistry);
         scanner.setResourceLoader(this.applicationContext);
         scanner.setAnnotationClass(this.annotationClass);
         scanner.registerFilters();

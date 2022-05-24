@@ -10,28 +10,28 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ResponseConvertBuild {
 
-    private static final Map<Method, com.marsh.proxy.convert.ResponseConvert> convertCache = new ConcurrentHashMap<>();
+    private static final Map<Method, ResponseConvert> convertCache = new ConcurrentHashMap<>();
 
-    public static <T extends com.marsh.proxy.convert.ResponseConvert> com.marsh.proxy.convert.ResponseConvert build(Method method){
-        com.marsh.proxy.convert.ResponseConvert responseConvert = convertCache.get(method);
+    public static <T extends ResponseConvert> ResponseConvert build(Method method){
+        ResponseConvert responseConvert = convertCache.get(method);
         if (responseConvert != null){
             return responseConvert;
         }
-        com.marsh.proxy.convert.ResponseHandler handler = method.getAnnotation(com.marsh.proxy.convert.ResponseHandler.class);
+        ResponseHandler handler = method.getAnnotation(ResponseHandler.class);
         if (handler == null){
-            return build(method, com.marsh.proxy.convert.DefaultResponseConvert.class);
+            return build(method, DefaultResponseConvert.class);
         }
         return build(method,handler.convert());
     }
 
-    public static <T extends com.marsh.proxy.convert.ResponseConvert> com.marsh.proxy.convert.ResponseConvert build(Method method, Class<T> clazz){
-        com.marsh.proxy.convert.ResponseConvert responseConvert = convertCache.get(method);
+    public static <T extends ResponseConvert> ResponseConvert build(Method method, Class<T> clazz){
+        ResponseConvert responseConvert = convertCache.get(method);
         if (responseConvert != null){
             return responseConvert;
         }
         return convertCache.computeIfAbsent(method, m -> {
             try {
-                com.marsh.proxy.convert.ResponseConvert rc = (com.marsh.proxy.convert.ResponseConvert)clazz.newInstance();
+                ResponseConvert rc = (ResponseConvert)clazz.newInstance();
                 return rc;
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(clazz.getName() + "缺少无参构造函数!");

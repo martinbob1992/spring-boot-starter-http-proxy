@@ -106,7 +106,7 @@ public class HttpClientUtil {
                         request.header(paramName,params[i].toString());
                     }
                 } else if (fromData != null){
-                    String paramName = fromData != null ? fromData.value() : null;
+                    String paramName = fromData != null ? fromData.name() : null;
                     if (StrUtil.isBlank(paramName)){
                         paramName = parameter.getName();
                     }

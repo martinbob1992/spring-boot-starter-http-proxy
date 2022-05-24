@@ -14,7 +14,7 @@ import java.util.Map;
 public class HttpProxyMethodInvokerBuilder {
 
 
-    public static Map<Method, com.marsh.proxy.binding.HttpProxy.HttpProxyMethodInvoker> build(Class targetInterface){
+    public static Map<Method, HttpProxy.HttpProxyMethodInvoker> build(Class targetInterface){
         if (!targetInterface.isInterface()){
             throw new RuntimeException(targetInterface + "不是一个接口类型!");
         }
@@ -23,15 +23,16 @@ public class HttpProxyMethodInvokerBuilder {
             throw new RuntimeException(targetInterface + "没有添加@DataProxy注解");
         }
         Method[] declaredMethods = targetInterface.getDeclaredMethods();
-        Map<Method, com.marsh.proxy.binding.HttpProxy.HttpProxyMethodInvoker> result = new HashMap<>();
+        Map<Method, HttpProxy.HttpProxyMethodInvoker> result = new HashMap<>();
         if (declaredMethods != null && declaredMethods.length > 0){
             for (Method method : declaredMethods){
                 ResponseHandler responseHandler = method.getAnnotation(ResponseHandler.class);
                 if (responseHandler == null && !method.getReturnType().isAssignableFrom(String.class)){
                     // 目前没有做返回结果转换，仅支持string返回结果
+                    // 没有指定ResponseHandler时会使用默认转换器DefaultResponseConvert,而默认转换器返回结果是String
                     throw new RuntimeException(targetInterface + "."+method.getName()+"返回结果必须必须使用String类型");
                 }
-                result.put(method,new com.marsh.proxy.binding.HttpProxy.DefaultMethodInvoker(new com.marsh.proxy.binding.HttpProxyMethod(method)));
+                result.put(method,new HttpProxy.DefaultMethodInvoker(new HttpProxyMethod(method)));
             }
         }
         return result;

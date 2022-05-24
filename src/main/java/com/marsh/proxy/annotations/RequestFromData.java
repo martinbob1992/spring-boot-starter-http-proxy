@@ -1,6 +1,5 @@
 package com.marsh.proxy.annotations;
 
-import org.springframework.core.annotation.AliasFor;
 import com.marsh.proxy.constant.ValueConstants;
 
 import java.lang.annotation.*;
@@ -10,10 +9,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface RequestFromData {
 
-    @AliasFor("name")
-    String value() default "";
-
-    @AliasFor("value")
     String name() default "";
 
     boolean required() default true;
