@@ -13,3 +13,5 @@
 ![](https://github.com/martinbob1992/spring-boot-starter-http-proxy/blob/master/src/main/images/test1.png?raw=true)
 
 ![](https://github.com/martinbob1992/spring-boot-starter-http-proxy/blob/master/src/main/images/test2.png?raw=true)
+
+![](https://github.com/martinbob1992/spring-boot-starter-http-proxy/blob/master/src/main/images/test3.png?raw=true)
