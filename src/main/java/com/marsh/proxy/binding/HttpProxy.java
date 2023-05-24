@@ -1,5 +1,7 @@
 package com.marsh.proxy.binding;
 
+import com.marsh.proxy.config.HttpProxyConfiguration;
+
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,12 +14,11 @@ import java.util.Map;
 public class HttpProxy<T> implements InvocationHandler, Serializable {
 
     private final Class<T> targetInterface;
+    private HttpProxyConfiguration configuration;
 
-    private final Map<Method, HttpProxyMethodInvoker> methodCache;
-
-    public HttpProxy(Class<T> targetInterface) {
-        this.methodCache = HttpProxyMethodInvokerBuilder.build(targetInterface);
+    public HttpProxy(Class<T> targetInterface,HttpProxyConfiguration configuration) {
         this.targetInterface = targetInterface;
+        this.configuration = configuration;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class HttpProxy<T> implements InvocationHandler, Serializable {
     }
 
     private HttpProxyMethodInvoker cachedInvoker(Method method) throws Throwable {
-        HttpProxyMethodInvoker invoker = methodCache.get(method);
+        HttpProxyMethodInvoker invoker = configuration.getMethodInvoker(method);
         if (invoker != null) {
             return invoker;
         }
@@ -38,7 +39,7 @@ public class HttpProxy<T> implements InvocationHandler, Serializable {
     }
 
 
-    interface HttpProxyMethodInvoker {
+    public interface HttpProxyMethodInvoker {
         Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
     }
 

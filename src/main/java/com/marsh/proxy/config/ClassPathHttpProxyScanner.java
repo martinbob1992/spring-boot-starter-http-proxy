@@ -25,6 +25,9 @@ public class ClassPathHttpProxyScanner extends ClassPathBeanDefinitionScanner {
     @Setter
     private Class<? extends Annotation> annotationClass;
 
+    @Setter
+    private HttpProxyConfiguration configuration;
+
     private Class<? extends HttpProxyFactoryBean> factoryBeanClass = HttpProxyFactoryBean.class;
 
     public ClassPathHttpProxyScanner(BeanDefinitionRegistry registry) {
@@ -64,7 +67,7 @@ public class ClassPathHttpProxyScanner extends ClassPathBeanDefinitionScanner {
             definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
             definition.setBeanClass(this.factoryBeanClass);
 
-            //definition.getPropertyValues().add("configuration", this.configuration);
+            definition.getPropertyValues().add("configuration", this.configuration);
 
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
         }

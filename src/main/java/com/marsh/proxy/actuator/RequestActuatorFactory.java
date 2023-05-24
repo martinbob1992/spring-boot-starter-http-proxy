@@ -1,5 +1,7 @@
 package com.marsh.proxy.actuator;
 
+import com.marsh.proxy.convert.ResponseConvert;
+
 import java.lang.reflect.Method;
 
 /**
@@ -10,6 +12,6 @@ public interface RequestActuatorFactory {
 
     boolean support(Method method);
 
-    RequestActuator getRequestActuator(Method method);
+    RequestActuator getRequestActuator(Method method, Object[] args, ResponseConvert responseConvert);
 
 }

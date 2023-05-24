@@ -1,6 +1,8 @@
 package com.marsh.proxy.binding;
 
+import com.marsh.proxy.config.HttpProxyConfiguration;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -14,6 +16,8 @@ import java.lang.reflect.Proxy;
  */
 public class HttpProxyFactoryBean<T> implements FactoryBean<T>, Serializable, InitializingBean {
 
+    @Setter
+    HttpProxyConfiguration configuration;
     @Getter
     protected final Class<T> targetInterface;
 
@@ -21,13 +25,9 @@ public class HttpProxyFactoryBean<T> implements FactoryBean<T>, Serializable, In
         this.targetInterface = targetInterface;
     }
 
-    protected T newInstance(com.marsh.proxy.binding.HttpProxy<T> httpProxy) {
-        return (T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, httpProxy);
-    }
-
     @Override
     public T getObject() throws Exception {
-        return (T) newInstance(new com.marsh.proxy.binding.HttpProxy(targetInterface));
+        return (T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, configuration.getHttpProxy(targetInterface));
     }
 
     @Override
@@ -37,6 +37,5 @@ public class HttpProxyFactoryBean<T> implements FactoryBean<T>, Serializable, In
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
     }
 }

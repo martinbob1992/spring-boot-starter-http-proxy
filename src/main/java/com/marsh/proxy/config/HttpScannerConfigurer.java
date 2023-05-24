@@ -1,8 +1,6 @@
 package com.marsh.proxy.config;
 
 import cn.hutool.core.annotation.AnnotationUtil;
-import com.marsh.proxy.actuator.RequestActuatorFactory;
-import com.marsh.proxy.actuator.RequestActuatorFactoryBean;
 import lombok.Setter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -26,6 +24,9 @@ public class HttpScannerConfigurer implements BeanDefinitionRegistryPostProcesso
     @Setter
     private Class<? extends Annotation> annotationClass;
 
+    @Setter
+    private HttpProxyConfiguration configuration;
+
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
@@ -44,6 +45,7 @@ public class HttpScannerConfigurer implements BeanDefinitionRegistryPostProcesso
         ClassPathHttpProxyScanner scanner = new ClassPathHttpProxyScanner(beanDefinitionRegistry);
         scanner.setResourceLoader(this.applicationContext);
         scanner.setAnnotationClass(this.annotationClass);
+        scanner.setConfiguration(configuration);
         scanner.registerFilters();
         scanner.scan(packages);
     }
@@ -55,12 +57,12 @@ public class HttpScannerConfigurer implements BeanDefinitionRegistryPostProcesso
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
-        String[] requestActuatorFactoryNames = configurableListableBeanFactory.getBeanNamesForType(RequestActuatorFactory.class);
+        /*String[] requestActuatorFactoryNames = configurableListableBeanFactory.getBeanNamesForType(RequestActuatorFactory.class);
         if (requestActuatorFactoryNames != null && requestActuatorFactoryNames.length > 0){
             for (String beanName : requestActuatorFactoryNames){
                 RequestActuatorFactoryBean.addRequestActuatorFactory(configurableListableBeanFactory.getBean(beanName,RequestActuatorFactory.class));
             }
-        }
+        }*/
 
     }
 

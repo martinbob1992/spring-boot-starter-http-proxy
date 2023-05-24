@@ -6,5 +6,5 @@ package com.marsh.proxy.actuator;
  */
 public interface RequestActuator {
 
-    Object execute(Object[] params);
+    Object execute();
 }

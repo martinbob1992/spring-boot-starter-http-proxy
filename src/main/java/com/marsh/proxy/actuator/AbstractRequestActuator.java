@@ -1,31 +1,22 @@
 package com.marsh.proxy.actuator;
 
 import cn.hutool.http.HttpRequest;
-import cn.hutool.http.Method;
-import com.marsh.proxy.convert.ResponseConvert;
-import com.marsh.proxy.convert.ResponseConvertBuild;
+import cn.hutool.http.HttpResponse;
 import com.marsh.proxy.exception.AuthProxyException;
 import com.marsh.proxy.util.HttpClientUtil;
 import lombok.SneakyThrows;
+
+import java.lang.annotation.Annotation;
 
 /**
  * @author Marsh
  * @date 2021-12-06日 11:56
  */
-public abstract class AbstractRequestActuator implements RequestActuator {
+public abstract class AbstractRequestActuator<T extends Annotation> implements RequestActuator {
 
-    protected final java.lang.reflect.Method method;
-    protected final String url;
-    protected final Method requestMethod;
-
-    public AbstractRequestActuator(java.lang.reflect.Method method, String url, Method requestMethod){
-        this.method = method;
-        this.url = url;
-        this.requestMethod = requestMethod;
-    }
-
-    public ResponseConvert getResponseConvert(){
-        return ResponseConvertBuild.build(this.method);
+    protected ActuatorContext<T> context;
+    public AbstractRequestActuator(ActuatorContext<T> context){
+        this.context = context;
     }
 
     /**
@@ -34,19 +25,23 @@ public abstract class AbstractRequestActuator implements RequestActuator {
      * @date 2021-12-07
      * @return cn.hutool.http.HttpRequest
      */
-    public HttpRequest getBaseHttpRequest(Object[] params){
-        return HttpClientUtil.buildBaseRequest(this.url, this.requestMethod,method,params);
+    public HttpRequest getBaseHttpRequest(){
+        return HttpClientUtil.buildBaseRequest(context);
     }
 
     public abstract void authentication(HttpRequest request) throws AuthProxyException;
 
+    public Object convert(HttpResponse response){
+        return context.getResponseConvert().convert(response);
+    }
 
     @Override
     @SneakyThrows
-    public Object execute(Object[] params){
-        HttpRequest request = getBaseHttpRequest(params);
+    public Object execute(){
+        HttpRequest request = getBaseHttpRequest();
         // 给当前请求添加授权信息
         authentication(request);
-        return getResponseConvert().convert(HttpClientUtil.execute(request));
+        HttpResponse response = HttpClientUtil.execute(request);
+        return convert(response);
     }
 }

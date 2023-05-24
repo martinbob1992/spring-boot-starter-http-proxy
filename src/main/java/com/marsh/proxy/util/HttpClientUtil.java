@@ -6,6 +6,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.google.gson.Gson;
+import com.marsh.proxy.actuator.ActuatorContext;
 import com.marsh.proxy.annotations.RequestBody;
 import com.marsh.proxy.annotations.RequestFromData;
 import com.marsh.proxy.annotations.RequestHeader;
@@ -14,6 +15,7 @@ import com.marsh.proxy.constant.ValueConstants;
 import com.marsh.proxy.exception.DataProxyException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 
@@ -68,6 +70,10 @@ public class HttpClientUtil {
      */
     public static HttpRequest buildBaseRequest(String url, Method method){
         return buildBaseRequest(url,method,null,null);
+    }
+
+    public static <T extends Annotation> HttpRequest buildBaseRequest(ActuatorContext<T> context){
+        return buildBaseRequest(context.getUrl(),context.getRequestMethod(),context.getInvokeMethod(),context.getParams());
     }
 
     public static HttpRequest buildBaseRequest(String url, Method requestMethod,java.lang.reflect.Method method,Object[] params){
